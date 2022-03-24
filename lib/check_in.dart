@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nice/dashboard.dart';
 
 class CheckIn extends StatelessWidget {
   const CheckIn({Key? key}) : super(key: key);
@@ -38,7 +39,7 @@ class CheckIn extends StatelessWidget {
                 child: ElevatedButton(
                   child: const Text("Check-in"),
                   onPressed: () => Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => const CheckIn())),
+                      MaterialPageRoute(builder: (context) => Dashboard())),
                   style: ElevatedButton.styleFrom(
                     primary: const Color(0xFF3CACE1),
                     onPrimary: Colors.white,
