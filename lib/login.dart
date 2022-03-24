@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart';
 import 'package:nice/check_in.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -68,8 +71,9 @@ class LoginScreen extends StatelessWidget {
               height: 45,
               child: ElevatedButton(
                 child: const Text("Login"),
-                onPressed: () => Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const CheckIn())),
+                onPressed: () => /*Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => const CheckIn())*/
+                 login(),
                 style: ElevatedButton.styleFrom(
                   primary: const Color(0xFF3CACE1),
                   onPrimary: Colors.white,
@@ -85,3 +89,45 @@ class LoginScreen extends StatelessWidget {
     );
   }
 }
+
+void login(/*String email , password*/) async {
+
+  try{
+
+    Response response = await post(
+        Uri.parse('http://test.niceengineers.in/api/login_user'),
+        body: {
+          'email' : 'sales@gmail.com',
+          'password' : '12345678'
+        }
+    );
+
+    if(response.statusCode == 200){
+
+      var data = jsonDecode(response.body.toString());
+      print(data);
+
+
+
+
+
+    }else {
+      print('failed');
+    }
+  }catch(e){
+    print(e.toString());
+  }
+}
+//http://test.niceengineers.in/api/login_user
+//email
+// password
+
+//data
+// name
+// api_access_token
+// id
+// param_name
+// role_id
+// checkin_id
+// id
+//status
