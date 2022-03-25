@@ -5,11 +5,10 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(image: AssetImage("assets/welcome.png")),
-        ),
+    return DecoratedBox(
+      decoration: new BoxDecoration(
+        image: new DecorationImage(
+            image: new AssetImage('assets/welcome.png'), fit: BoxFit.fill),
       ),
     );
   }

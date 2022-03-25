@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:nice/dashboard.dart';
 
 class CheckIn extends StatelessWidget {
   const CheckIn({Key? key}) : super(key: key);
+  final style = const TextStyle(fontSize: 14, color: Color(0xFF4F4F4F));
 
   @override
   Widget build(BuildContext context) {
@@ -14,19 +16,19 @@ class CheckIn extends StatelessWidget {
             SizedBox(
               height: 200,
               width: 200,
-              child: Image.asset('assets/welcome.png'),
+              child: Image.asset('assets/checkin.png'),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 70),
+              padding: const EdgeInsets.only(top: 50),
               child: Column(
-                children: const [
+                children: [
                   Text(
                     "Please start your check-in before",
-                    style: TextStyle(fontSize: 14, color: Color(0xFF4F4F4F)),
+                    style: GoogleFonts.poppins(textStyle: style),
                   ),
                   Text(
                     "placed the order",
-                    style: TextStyle(fontSize: 14, color: Color(0xFF4F4F4F)),
+                    style: GoogleFonts.poppins(textStyle: style),
                   ),
                 ],
               ),
