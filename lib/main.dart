@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:nice/screens/forum.dart';
 import 'package:nice/screens/login.dart';
 
 void main() {
