@@ -1,9 +1,12 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart';
-import 'package:nice/login_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'check_in.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -88,10 +91,8 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 45,
               child: ElevatedButton(
                 child: const Text("Login"),
-                onPressed:
-                    () => /*Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const CheckIn())*/
-                        login(myController.text, myController_pass.text),
+                onPressed: () =>
+                    login(context, myController.text, myController_pass.text),
                 style: ElevatedButton.styleFrom(
                   primary: const Color(0xFF3CACE1),
                   onPrimary: Colors.white,
@@ -108,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-void login(String email, password) async {
+void login(BuildContext context, String email, password) async {
   try {
     Response response = await post(
         Uri.parse('http://test.niceengineers.in/api/login_user'),
@@ -118,13 +119,36 @@ void login(String email, password) async {
         });
 
     if (response.statusCode == 200) {
-      final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
-      return parsed
-          .map<LoginModel>((json) => LoginModel.fromJson(json))
-          .toList();
-      /*
       var data = jsonDecode(response.body.toString());
-      print(data);*/
+      print(data);
+
+      var status = data["status"];
+      print(status);
+      if (status) {
+        var data = jsonDecode(response.body);
+
+        var userId = data['data']['id'];
+        var name = data['data']['name'];
+        var apiAccessToken = data['data']['api_access_token'];
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('userId', userId.toString());
+        prefs.setString('name', name);
+        prefs.setString('apiAccessToken', apiAccessToken);
+
+        Navigator.pushReplacement<void, void>(
+          context,
+          MaterialPageRoute<void>(
+            builder: (BuildContext context) => CheckIn(),
+          ),
+        );
+      } else {
+        var message = data["message"];
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(message),
+        ));
+      }
     } else {
       print('failed');
     }

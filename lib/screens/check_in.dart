@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nice/dashboard.dart';
+import 'package:http/http.dart';
+import 'package:nice/screens/dashboard.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CheckIn extends StatelessWidget {
   const CheckIn({Key? key}) : super(key: key);
@@ -40,8 +44,7 @@ class CheckIn extends StatelessWidget {
                 height: 45,
                 child: ElevatedButton(
                   child: const Text("Check-in"),
-                  onPressed: () => Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => Dashboard())),
+                  onPressed: () => checkIn(context),
                   style: ElevatedButton.styleFrom(
                     primary: const Color(0xFF3CACE1),
                     onPrimary: Colors.white,
@@ -56,5 +59,54 @@ class CheckIn extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+void checkIn(BuildContext context) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var user_id = prefs.get("userId");
+  var apiAccessToken = prefs.get("apiAccessToken");
+  print(user_id);
+
+  try {
+    Response response = await post(
+        Uri.parse('http://test.niceengineers.in/api/checkin_user'),
+        headers: {
+          'Authorization': "$apiAccessToken",
+        },
+        body: {
+          'user_id': user_id.toString(),
+          'latitude': "26.0000",
+          'longitude': "72.6400",
+          'address': "jaipur",
+        });
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body.toString());
+      print(data);
+
+      var status = data["status"];
+      print(status);
+      if (status) {
+        var data = jsonDecode(response.body);
+        print(data);
+        Navigator.pushReplacement<void, void>(
+          context,
+          MaterialPageRoute<void>(
+            builder: (BuildContext context) => Dashboard(),
+          ),
+        );
+      } else {
+        var message = data["message"];
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(message),
+        ));
+      }
+    } else {
+      print('failed');
+    }
+  } catch (e) {
+    print(e.toString());
   }
 }

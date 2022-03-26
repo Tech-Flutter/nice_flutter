@@ -1,11 +1,25 @@
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nice/check_in.dart';
+import 'package:http/http.dart';
+import 'package:nice/screens/check_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+int totalorder = 0,
+    sucess = 0,
+    progress = 0,
+    pending = 0,
+    cancelled = 0,
+    today = 0;
+
+String username = "";
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key}) : super(key: key);
+  Dashboard({Key? key}) : super(key: key);
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -24,7 +38,6 @@ class _DashboardState extends State<Dashboard> {
     const CheckIn(),
     const CheckIn(),
   ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +55,7 @@ class _DashboardState extends State<Dashboard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
-                        padding: EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
                         child: Center(
                             child: SvgPicture.asset(
                           "assets/logo.svg",
@@ -113,7 +126,7 @@ class _DashboardState extends State<Dashboard> {
                                       ),
                                     ),
                                     Text(
-                                      "17",
+                                      "$today",
                                       style: GoogleFonts.poppins(
                                           textStyle: style2),
                                     )
@@ -132,7 +145,7 @@ class _DashboardState extends State<Dashboard> {
                                     ),
                                   ),
                                   Text(
-                                    "08",
+                                    "$pending",
                                     style:
                                         GoogleFonts.poppins(textStyle: style2),
                                   ),
@@ -182,7 +195,7 @@ class _DashboardState extends State<Dashboard> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "198",
+                                    "$totalorder",
                                     style:
                                         GoogleFonts.poppins(textStyle: style),
                                   ),
@@ -228,7 +241,7 @@ class _DashboardState extends State<Dashboard> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "142",
+                                    "$sucess",
                                     style:
                                         GoogleFonts.poppins(textStyle: style),
                                   ),
@@ -274,7 +287,7 @@ class _DashboardState extends State<Dashboard> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "29",
+                                    "$progress",
                                     style:
                                         GoogleFonts.poppins(textStyle: style),
                                   ),
@@ -320,7 +333,7 @@ class _DashboardState extends State<Dashboard> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "18",
+                                    "$pending",
                                     style:
                                         GoogleFonts.poppins(textStyle: style),
                                   ),
@@ -366,7 +379,7 @@ class _DashboardState extends State<Dashboard> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "09",
+                                    "$cancelled",
                                     style:
                                         GoogleFonts.poppins(textStyle: style),
                                   ),
@@ -416,5 +429,57 @@ class _DashboardState extends State<Dashboard> {
             });
           },
         ));
+  }
+
+  void initState() {
+    super.initState();
+    dashboard(context);
+  }
+}
+
+void dashboard(BuildContext context) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var user_id = prefs.get("userId");
+  var apiAccessToken = prefs.get("apiAccessToken").toString();
+  print(apiAccessToken);
+
+  try {
+    Response response = await post(
+        Uri.parse('http://test.niceengineers.in/api/homestats'),
+        headers: {
+          'Authorization': "$apiAccessToken",
+        },
+        body: {
+          'user_id': user_id.toString(),
+        });
+
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body.toString());
+      print(data);
+
+      var status = data["status"];
+      print(status);
+      if (status) {
+        var data = jsonDecode(response.body);
+        print(data);
+
+        totalorder = data['data']['total_order'];
+        sucess = data['data']['success'];
+        progress = data['data']['progress'];
+        pending = data['data']['pending'];
+        cancelled = data['data']['cancelled'];
+        today = data['data']['today_order'];
+      } else {
+        var message = data["message"];
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(message),
+        ));
+      }
+    } else {
+      print('failed');
+    }
+  } catch (e) {
+    print(e.toString());
   }
 }

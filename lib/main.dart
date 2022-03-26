@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:nice/dashboard.dart';
-import 'package:nice/login.dart';
+import 'package:nice/screens/forum.dart';
+import 'package:nice/screens/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,8 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // home: const MyHomePage(),
-      home: const Dashboard(),
+      home: const MyHomePage(),
     );
   }
 }
