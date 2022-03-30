@@ -8,13 +8,13 @@ class LoginModel {
   LoginModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
@@ -96,36 +96,36 @@ class Data {
     paramName = json['param_name'];
     paramDescription = json['param_description'];
     checkinId = json['checkin_id'] != null
-        ? new CheckinId.fromJson(json['checkin_id'])
+        ? CheckinId.fromJson(json['checkin_id'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['role_id'] = this.roleId;
-    data['name'] = this.name;
-    data['email'] = this.email;
-    data['email_verified_at'] = this.emailVerifiedAt;
-    data['mobile'] = this.mobile;
-    data['billing_address'] = this.billingAddress;
-    data['delivery_address'] = this.deliveryAddress;
-    data['gstin'] = this.gstin;
-    data['reference_name'] = this.referenceName;
-    data['reference_mobile'] = this.referenceMobile;
-    data['transporter_name'] = this.transporterName;
-    data['transporter_contact'] = this.transporterContact;
-    data['area'] = this.area;
-    data['location_type'] = this.locationType;
-    data['status'] = this.status;
-    data['api_access_token'] = this.apiAccessToken;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    data['param_value'] = this.paramValue;
-    data['param_name'] = this.paramName;
-    data['param_description'] = this.paramDescription;
-    if (this.checkinId != null) {
-      data['checkin_id'] = this.checkinId!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['role_id'] = roleId;
+    data['name'] = name;
+    data['email'] = email;
+    data['email_verified_at'] = emailVerifiedAt;
+    data['mobile'] = mobile;
+    data['billing_address'] = billingAddress;
+    data['delivery_address'] = deliveryAddress;
+    data['gstin'] = gstin;
+    data['reference_name'] = referenceName;
+    data['reference_mobile'] = referenceMobile;
+    data['transporter_name'] = transporterName;
+    data['transporter_contact'] = transporterContact;
+    data['area'] = area;
+    data['location_type'] = locationType;
+    data['status'] = status;
+    data['api_access_token'] = apiAccessToken;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    data['param_value'] = paramValue;
+    data['param_name'] = paramName;
+    data['param_description'] = paramDescription;
+    if (checkinId != null) {
+      data['checkin_id'] = checkinId!.toJson();
     }
     return data;
   }
@@ -141,8 +141,8 @@ class CheckinId {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
     return data;
   }
 }

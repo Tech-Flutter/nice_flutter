@@ -13,10 +13,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return Scaffold(
         body: Stack(
       children: [
-        Container(
+        const SizedBox(
             height: double.infinity,
             width: double.infinity,
-            child: const Image(
+            child: Image(
                 image: AssetImage("assets/welcome.png"), fit: BoxFit.fill)),
         Padding(
           padding: const EdgeInsets.only(bottom: 70),

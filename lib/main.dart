@@ -50,9 +50,12 @@ class _MyHomePageState extends State<MyHomePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Center(
-              child: SvgPicture.asset(
-            "assets/logo.svg",
-            height: 70,
+              child: Hero(
+            tag: "logo",
+            child: SvgPicture.asset(
+              "assets/logo.svg",
+              height: 70,
+            ),
           )),
           const Text(
             "nice",

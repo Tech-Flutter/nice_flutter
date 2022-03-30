@@ -9,8 +9,8 @@ import 'package:http/http.dart';
 import 'package:nice/screens/check_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-int totalorder = 0,
-    sucess = 0,
+var totalOrder = 0,
+    success = 0,
     progress = 0,
     pending = 0,
     cancelled = 0,
@@ -19,7 +19,7 @@ int totalorder = 0,
 String username = "";
 
 class Dashboard extends StatefulWidget {
-  Dashboard({Key? key}) : super(key: key);
+  const Dashboard({Key? key}) : super(key: key);
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -161,7 +161,7 @@ class _DashboardState extends State<Dashboard> {
                 Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
-                      padding: EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(20),
                       child: Text("Monthly Review",
                           style: GoogleFonts.poppins(
                             textStyle: const TextStyle(
@@ -195,12 +195,12 @@ class _DashboardState extends State<Dashboard> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "$totalorder",
+                                    "$totalOrder",
                                     style:
                                         GoogleFonts.poppins(textStyle: style),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(top: 5),
+                                    padding: const EdgeInsets.only(top: 5),
                                     child: Text(
                                       "Orders Placed",
                                       style: GoogleFonts.poppins(
@@ -241,7 +241,7 @@ class _DashboardState extends State<Dashboard> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "$sucess",
+                                    "$success",
                                     style:
                                         GoogleFonts.poppins(textStyle: style),
                                   ),
@@ -431,6 +431,7 @@ class _DashboardState extends State<Dashboard> {
         ));
   }
 
+  @override
   void initState() {
     super.initState();
     dashboard(context);
@@ -439,7 +440,7 @@ class _DashboardState extends State<Dashboard> {
 
 void dashboard(BuildContext context) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  var user_id = prefs.get("userId");
+  var userId = prefs.get("userId");
   var apiAccessToken = prefs.get("apiAccessToken").toString();
   print(apiAccessToken);
 
@@ -447,10 +448,10 @@ void dashboard(BuildContext context) async {
     Response response = await post(
         Uri.parse('http://test.niceengineers.in/api/homestats'),
         headers: {
-          'Authorization': "$apiAccessToken",
+          'Authorization': apiAccessToken,
         },
         body: {
-          'user_id': user_id.toString(),
+          'user_id': userId.toString(),
         });
 
     if (response.statusCode == 200) {
@@ -463,8 +464,8 @@ void dashboard(BuildContext context) async {
         var data = jsonDecode(response.body);
         print(data);
 
-        totalorder = data['data']['total_order'];
-        sucess = data['data']['success'];
+        totalOrder = data['data']['total_order'];
+        success = data['data']['success'];
         progress = data['data']['progress'];
         pending = data['data']['pending'];
         cancelled = data['data']['cancelled'];

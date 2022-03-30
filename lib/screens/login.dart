@@ -32,9 +32,12 @@ class _LoginScreenState extends State<LoginScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(
-              child: SvgPicture.asset(
-            "assets/logo.svg",
-            height: 70,
+              child: Hero(
+            tag: "logo",
+            child: SvgPicture.asset(
+              "assets/logo.svg",
+              height: 70,
+            ),
           )),
           const Text(
             "nice",
@@ -139,12 +142,11 @@ void login(BuildContext context, String email, password) async {
         Navigator.pushReplacement<void, void>(
           context,
           MaterialPageRoute<void>(
-            builder: (BuildContext context) => CheckIn(),
+            builder: (BuildContext context) => const CheckIn(),
           ),
         );
       } else {
         var message = data["message"];
-
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(message),
         ));
